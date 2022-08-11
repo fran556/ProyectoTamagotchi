@@ -9,5 +9,5 @@ package MascotaVirtual;
  * @author Francisco
  */
 public class Tamagotchi {
-    
+  private int energia;
 }
