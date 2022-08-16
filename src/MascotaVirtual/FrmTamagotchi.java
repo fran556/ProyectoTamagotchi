@@ -4,19 +4,100 @@
  */
 package MascotaVirtual;
 
+import Utilspet.Tiempo;
+import java.awt.event.ActionEvent;
+import javax.swing.Timer;
+
 /**
  *
  * @author Francisco
  */
 public class FrmTamagotchi extends javax.swing.JFrame {
-
+       private Tiempo time;
+       int c1;
+       int c2;
+       int c3;
+       int c4;
+       int c5;
     /**
      * Creates new form FrmTamagotchi
      */
     public FrmTamagotchi() {
         initComponents();
+        this.barAburrimiento.setValue(100);
+        this.barBanio.setValue(100);
+        this.barEnergia.setValue(100);
+        this.barHambre.setValue(100);
+        this.barSalud.setValue(100);
+        
+        time=new Tiempo();
+        c1=0;
+        c2=0;
+        c3=0;
+        c4=0;
+        c5=0;
+    }
+    
+    Timer timer = new Timer (1000, (ActionEvent e) -> {
+        this.lblTime.setText(time.toString());
+        
+        this.restaAburrimiento();
+        this.restaBanio();
+        this.restaEnergia();
+        this.restaHambre();
+        this.restaSalud();
+        this.time.contar();
+        
+    });
+    public void iniciar(){
+        timer.start();
     }
 
+    public void restaAburrimiento(){//METODO PARA RESTAR LAS BARRAS
+        c1++;
+        
+        if (c1==5){
+            this.barAburrimiento.setValue(this.barAburrimiento.getValue()-20); 
+           c1=0; 
+        }
+    }
+    
+    public void restaBanio(){//METODO PARA RESTAR LAS BARRAS
+        c2++;
+        if (c2==5){
+           this.barBanio.setValue(this.barBanio.getValue()-5); 
+           c2=0;
+        }
+    }
+    
+    public void restaEnergia(){
+        c3++;
+        if (c3==5){
+            this.barEnergia.setValue(this.barEnergia.getValue()-15);
+            c3=0;
+        }
+    }
+     public void restaHambre(){
+         c4++;
+         if (c4==5){
+            this.barHambre.setValue(this.barHambre.getValue()-5);
+            c4=0;
+        }
+     }
+     
+     public void restaSalud(){
+         c5++;
+         if (c5==5){
+            this.barSalud.setValue(this.barSalud.getValue()-5);
+            c5=0;
+        }
+     }
+     
+     public void sumaEnergia(){
+         if (this.barEnergia.getValue()<100){
+           this.barEnergia.setValue(barEnergia.getValue()+10); 
+        }
+     }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,31 +107,152 @@ public class FrmTamagotchi extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        barEnergia = new javax.swing.JProgressBar();
+        barHambre = new javax.swing.JProgressBar();
+        barBanio = new javax.swing.JProgressBar();
+        barSalud = new javax.swing.JProgressBar();
+        lblEnergia = new javax.swing.JLabel();
+        lblHambre = new javax.swing.JLabel();
+        lblBanio = new javax.swing.JLabel();
+        lblSalud = new javax.swing.JLabel();
+        barAburrimiento = new javax.swing.JProgressBar();
+        lblAburrimiento = new javax.swing.JLabel();
+        lblNombre = new javax.swing.JLabel();
+        lblEdad = new javax.swing.JLabel();
+        lblEtapa = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        lblTime = new javax.swing.JLabel();
+        btnEnergia = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/image.png"))); // NOI18N
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        barEnergia.setBackground(new java.awt.Color(0, 153, 0));
+        barEnergia.setStringPainted(true);
+        jPanel1.add(barEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 98, 16));
+
+        barHambre.setBackground(new java.awt.Color(0, 153, 0));
+        barHambre.setStringPainted(true);
+        jPanel1.add(barHambre, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 98, 16));
+
+        barBanio.setBackground(new java.awt.Color(0, 153, 0));
+        barBanio.setStringPainted(true);
+        jPanel1.add(barBanio, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, 98, 16));
+
+        barSalud.setBackground(new java.awt.Color(0, 153, 0));
+        barSalud.setStringPainted(true);
+        jPanel1.add(barSalud, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 50, 98, 16));
+
+        lblEnergia.setText("Energia");
+        jPanel1.add(lblEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, 48, -1));
+
+        lblHambre.setText("Hambre");
+        jPanel1.add(lblHambre, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, 48, -1));
+
+        lblBanio.setText("Baño");
+        jPanel1.add(lblBanio, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, 48, -1));
+
+        lblSalud.setText("Salud");
+        jPanel1.add(lblSalud, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 30, 48, -1));
+
+        barAburrimiento.setBackground(new java.awt.Color(0, 153, 0));
+        barAburrimiento.setString("0%");
+        barAburrimiento.setStringPainted(true);
+        jPanel1.add(barAburrimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 98, 16));
+
+        lblAburrimiento.setText("Aburrimiento");
+        jPanel1.add(lblAburrimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 72, -1));
+
+        lblNombre.setText("Nombre");
+        jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
+
+        lblEdad.setText("edad");
+        jPanel1.add(lblEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 37, -1));
+
+        lblEtapa.setText("Etapa");
+        jPanel1.add(lblEtapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 37, -1));
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, -1, -1));
+
+        lblTime.setText("Time");
+        jPanel1.add(lblTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(575, 425, 97, -1));
+
+        btnEnergia.setText("jButton2");
+        btnEnergia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnergiaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 470, -1, -1));
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/image.png"))); // NOI18N
+        jLabel10.setText("jLabel10");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, 200, 190));
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/istockphoto-1309902693-170667a.png"))); // NOI18N
+        jLabel9.setText("jLabel9");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 520));
+
+        jMenu1.setText("File");
+
+        jMenuItem1.setText("jMenuItem1");
+        jMenu1.add(jMenuItem1);
+        jMenu1.add(jSeparator1);
+
+        jMenuItem2.setText("jMenuItem2");
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addComponent(jLabel1)
-                .addContainerGap(111, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(78, 78, 78))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+//        if (this.barAburrimiento.getValue()==10){
+//            
+//        }else{
+//            this.barAburrimiento.setValue(this.barAburrimiento.getValue()-5);// para restarle a la barra 
+//        }
+        this.iniciar();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnEnergiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnergiaActionPerformed
+        sumaEnergia();
+        int valor=this.barEnergia.getValue();
+        this.lblTime.setText(String.valueOf(valor));
+    }//GEN-LAST:event_btnEnergiaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -88,6 +290,30 @@ public class FrmTamagotchi extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JProgressBar barAburrimiento;
+    private javax.swing.JProgressBar barBanio;
+    private javax.swing.JProgressBar barEnergia;
+    private javax.swing.JProgressBar barHambre;
+    private javax.swing.JProgressBar barSalud;
+    private javax.swing.JButton btnEnergia;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JLabel lblAburrimiento;
+    private javax.swing.JLabel lblBanio;
+    private javax.swing.JLabel lblEdad;
+    private javax.swing.JLabel lblEnergia;
+    private javax.swing.JLabel lblEtapa;
+    private javax.swing.JLabel lblHambre;
+    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblSalud;
+    private javax.swing.JLabel lblTime;
     // End of variables declaration//GEN-END:variables
 }
