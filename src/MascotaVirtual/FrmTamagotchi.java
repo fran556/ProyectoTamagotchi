@@ -92,15 +92,15 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     */
     public void etapa(){
          int ed=Integer.parseInt(this.lblEdad.getText());
-        if(ed==5 ){
+        if(ed==10 ){
             pet.setEtapa(Etapa.Bebe);
             this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BebeNormal.png")));
             this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
-        }if(ed==10){
+        }if(ed==20){
             pet.setEtapa(Etapa.Joven);
             this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/JovenNormal.png")));
             this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
-        }if(ed==15){
+        }if(ed==30){
             pet.setEtapa(Etapa.Adulto);
             this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Adulto Normal.png")));
             this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
@@ -153,17 +153,27 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     public void sumaAburrimiento(){//METODO PARA sumar LAS BARRA
         c1++;
         if (c1==5){
-            pet.setAburrimiento(pet.getAburrimiento()+10);
+            pet.setAburrimiento(pet.getAburrimiento()+10);//suma al aburrimiento
             this.barAburrimiento.setValue(pet.getAburrimiento()); 
-            if(pet.getAburrimiento()>=90){
-                pet.setEstado(Estado.Enfermo);
-                this.lblEstado.setText(String.valueOf(pet.getEstado()));
-            }else{
-                pet.setEstado(Estado.Normal);
-                this.lblEstado.setText(String.valueOf(pet.getEstado())); 
-            }
            c1=0; 
         }
+        
+        if(pet.getAburrimiento()>=90  ){
+                pet.setEstado(Estado.Enfermo);
+                this.lblEstado.setText(String.valueOf(pet.getEstado()));
+//                if(pet.getEdad()<5){
+                    this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/HuevoEnfermo.png")));
+//                }
+                    //verificar cuando cambia
+                
+            }else{
+                pet.setEstado(Estado.Normal);
+                this.lblEstado.setText(String.valueOf(pet.getEstado()));
+                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perritoh.png")));
+            }
+        
+        
+        
     }
     
     public void restaBanio(){//METODO PARA RESTAR LAS BARRAS
