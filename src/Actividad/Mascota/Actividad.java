@@ -9,5 +9,19 @@ package Actividad.Mascota;
  * @author Francisco
  */
 public class Actividad {
-    
+    private int energia;
+    private int entretenimiento;
+
+    public int getEnergia() {
+        return energia;
+    }
+
+    public int getEntretenimiento() {
+        return entretenimiento;
+    }
+
+    public Actividad(int energia, int entretenimiento) {//constructor
+        this.energia = energia;
+        this.entretenimiento = entretenimiento;
+    }
 }

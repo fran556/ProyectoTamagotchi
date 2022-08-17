@@ -6,39 +6,46 @@ package MascotaVirtual;
 
 import Utilspet.Tiempo;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+//import java.util.concurrent.TimeUnit;
 import javax.swing.Timer;
 
 /**
  *
  * @author Francisco
  */
-public class FrmTamagotchi extends javax.swing.JFrame {
+public final class FrmTamagotchi extends javax.swing.JFrame {
        private Tiempo time;
+       private Mascota pet;
+       
        int c1;
        int c2;
        int c3;
        int c4;
        int c5;
+       int cEdad;
+       int cEtapa=0;
     /**
      * Creates new form FrmTamagotchi
      */
     public FrmTamagotchi() {
         initComponents();
-        this.barAburrimiento.setValue(100);
-        this.barBanio.setValue(100);
-        this.barEnergia.setValue(100);
-        this.barHambre.setValue(100);
-        this.barSalud.setValue(100);
-        
+        this.setLocationRelativeTo(FrmTamagotchi.this);
+        pet= new Mascota();
         time=new Tiempo();
+        inicializar();
+        nombre();
+        iniciar();
         c1=0;
         c2=0;
         c3=0;
         c4=0;
         c5=0;
+        cEdad=0;
     }
     
-    Timer timer = new Timer (1000, (ActionEvent e) -> {
+    Timer timer = new Timer (20, (ActionEvent e) -> {
         this.lblTime.setText(time.toString());
         
         this.restaAburrimiento();
@@ -46,16 +53,78 @@ public class FrmTamagotchi extends javax.swing.JFrame {
         this.restaEnergia();
         this.restaHambre();
         this.restaSalud();
+        this.AumentaEdad();
         this.time.contar();
-        
+        this.etapa();
     });
-    public void iniciar(){
-        timer.start();
+    
+    public void nombre(){
+        pet.nombrePet();
+        lblNombre.setText(pet.getNombre());
     }
-
+    /*
+    Metodo que indica la etapa de la mascota.
+    */
+    public void etapa(){
+         int ed=Integer.parseInt(this.lblEdad.getText());
+        if(ed==30 ){
+            pet.setEtapa(Etapa.Bebe);
+            this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BebeNormal.png")));
+            this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
+        }if(ed==60){
+            pet.setEtapa(Etapa.Joven);
+            this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/JovenNormal.png")));
+            this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
+        }if(ed==90){
+            pet.setEtapa(Etapa.Adulto);
+            this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Adulto Normal.png")));
+            this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
+        }
+    }
+    /*
+    Metodo que inicializa las barras de estado,Edad,Etapa.
+    */
+    public void  inicializar(){ //Inicializa las barras de estado
+        this.barAburrimiento.setValue(pet.getAburrimiento());
+        this.barBanio.setValue(pet.getNecesidades());
+        this.barEnergia.setValue(pet.getEnergia());
+        this.barHambre.setValue(pet.getHambre());
+        this.barSalud.setValue(pet.getSalud());
+        this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perritoh.png")));
+        this.lblEdad.setText(String.valueOf(pet.getEdad()));
+        this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
+       
+    }
+    
+    public void iniciar(){
+//         try {
+//            TimeUnit.MILLISECONDS.sleep(1000);
+           timer.start();
+//        } catch (InterruptedException ex) {
+           
+//        }//
+        
+    }
+    /*
+    Metodo que aumenta la edad.
+    */
+    public void AumentaEdad(){//Aumentamos la edad conforme pasa el tiempo
+        cEdad++;
+        if (cEdad==5){
+            int edad=Integer.parseInt(this.lblEdad.getText());
+            pet.setEdad(edad+1);
+            this.lblEdad.setText(String.valueOf(pet.getEdad()));
+            cEdad=0;
+        }else if(pet.getEdad()==100){
+            timer.stop();
+            JOptionPane.showMessageDialog(null, "Fallecio por motivos de edad");
+        }
+    }
+    /*
+    Metodo para restar el aburrimiento
+    */
     public void restaAburrimiento(){//METODO PARA RESTAR LAS BARRAS
         c1++;
-        
         if (c1==5){
             this.barAburrimiento.setValue(this.barAburrimiento.getValue()-20); 
            c1=0; 
@@ -70,14 +139,14 @@ public class FrmTamagotchi extends javax.swing.JFrame {
         }
     }
     
-    public void restaEnergia(){
+    public void restaEnergia(){//METODO PARA RESTAR LAS BARRAS
         c3++;
         if (c3==5){
             this.barEnergia.setValue(this.barEnergia.getValue()-15);
             c3=0;
         }
     }
-     public void restaHambre(){
+     public void restaHambre(){//METODO PARA RESTAR LAS BARRAS
          c4++;
          if (c4==5){
             this.barHambre.setValue(this.barHambre.getValue()-5);
@@ -85,15 +154,16 @@ public class FrmTamagotchi extends javax.swing.JFrame {
         }
      }
      
-     public void restaSalud(){
+     public void restaSalud(){//METODO PARA RESTAR LAS BARRAS
          c5++;
-         if (c5==5){
+         if (c5==5 ){
             this.barSalud.setValue(this.barSalud.getValue()-5);
+            
             c5=0;
         }
      }
      
-     public void sumaEnergia(){
+     public void sumaEnergia(){//METODO PARA RESTAR LAS BARRAS
          if (this.barEnergia.getValue()<100){
            this.barEnergia.setValue(barEnergia.getValue()+10); 
         }
@@ -108,7 +178,7 @@ public class FrmTamagotchi extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        barEnergia = new javax.swing.JProgressBar();
+        barAburrimiento = new javax.swing.JProgressBar();
         barHambre = new javax.swing.JProgressBar();
         barBanio = new javax.swing.JProgressBar();
         barSalud = new javax.swing.JProgressBar();
@@ -116,7 +186,6 @@ public class FrmTamagotchi extends javax.swing.JFrame {
         lblHambre = new javax.swing.JLabel();
         lblBanio = new javax.swing.JLabel();
         lblSalud = new javax.swing.JLabel();
-        barAburrimiento = new javax.swing.JProgressBar();
         lblAburrimiento = new javax.swing.JLabel();
         lblNombre = new javax.swing.JLabel();
         lblEdad = new javax.swing.JLabel();
@@ -124,8 +193,8 @@ public class FrmTamagotchi extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         lblTime = new javax.swing.JLabel();
         btnEnergia = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        lblImagen = new javax.swing.JLabel();
+        barEnergia = new javax.swing.JProgressBar();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -135,11 +204,12 @@ public class FrmTamagotchi extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setOpaque(false);
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        barEnergia.setBackground(new java.awt.Color(0, 153, 0));
-        barEnergia.setStringPainted(true);
-        jPanel1.add(barEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 98, 16));
+        barAburrimiento.setBackground(new java.awt.Color(0, 153, 0));
+        barAburrimiento.setStringPainted(true);
+        jPanel1.add(barAburrimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 98, 16));
 
         barHambre.setBackground(new java.awt.Color(0, 153, 0));
         barHambre.setStringPainted(true);
@@ -165,22 +235,17 @@ public class FrmTamagotchi extends javax.swing.JFrame {
         lblSalud.setText("Salud");
         jPanel1.add(lblSalud, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 30, 48, -1));
 
-        barAburrimiento.setBackground(new java.awt.Color(0, 153, 0));
-        barAburrimiento.setString("0%");
-        barAburrimiento.setStringPainted(true);
-        jPanel1.add(barAburrimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 98, 16));
-
         lblAburrimiento.setText("Aburrimiento");
         jPanel1.add(lblAburrimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 72, -1));
 
         lblNombre.setText("Nombre");
         jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
 
-        lblEdad.setText("edad");
-        jPanel1.add(lblEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 37, -1));
+        lblEdad.setText("Edad");
+        jPanel1.add(lblEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 50, -1));
 
         lblEtapa.setText("Etapa");
-        jPanel1.add(lblEtapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 37, -1));
+        jPanel1.add(lblEtapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 70, -1));
 
         jButton1.setText("jButton1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -188,10 +253,10 @@ public class FrmTamagotchi extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, -1, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 390, -1, -1));
 
         lblTime.setText("Time");
-        jPanel1.add(lblTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(575, 425, 97, -1));
+        jPanel1.add(lblTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 360, 97, -1));
 
         btnEnergia.setText("jButton2");
         btnEnergia.addActionListener(new java.awt.event.ActionListener() {
@@ -199,15 +264,12 @@ public class FrmTamagotchi extends javax.swing.JFrame {
                 btnEnergiaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 470, -1, -1));
+        jPanel1.add(btnEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 390, -1, -1));
+        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 270, 230));
 
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/image.png"))); // NOI18N
-        jLabel10.setText("jLabel10");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, 200, 190));
-
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/istockphoto-1309902693-170667a.png"))); // NOI18N
-        jLabel9.setText("jLabel9");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 520));
+        barEnergia.setBackground(new java.awt.Color(0, 153, 0));
+        barEnergia.setStringPainted(true);
+        jPanel1.add(barEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 98, 16));
 
         jMenu1.setText("File");
 
@@ -229,11 +291,15 @@ public class FrmTamagotchi extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -245,13 +311,17 @@ public class FrmTamagotchi extends javax.swing.JFrame {
 //        }else{
 //            this.barAburrimiento.setValue(this.barAburrimiento.getValue()-5);// para restarle a la barra 
 //        }
-        this.iniciar();
+      
+        
+//        pet.nombrePet();
+//        this.lblNombre.setText(pet.getNombre());
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnEnergiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnergiaActionPerformed
         sumaEnergia();
-        int valor=this.barEnergia.getValue();
+        int valor=this.barAburrimiento.getValue();
         this.lblTime.setText(String.valueOf(valor));
+       
     }//GEN-LAST:event_btnEnergiaActionPerformed
 
     /**
@@ -297,8 +367,6 @@ public class FrmTamagotchi extends javax.swing.JFrame {
     private javax.swing.JProgressBar barSalud;
     private javax.swing.JButton btnEnergia;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -312,6 +380,7 @@ public class FrmTamagotchi extends javax.swing.JFrame {
     private javax.swing.JLabel lblEnergia;
     private javax.swing.JLabel lblEtapa;
     private javax.swing.JLabel lblHambre;
+    private javax.swing.JLabel lblImagen;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblSalud;
     private javax.swing.JLabel lblTime;
