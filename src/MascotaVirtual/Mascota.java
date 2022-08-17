@@ -21,6 +21,7 @@ public class Mascota {
     private int aburrimiento;
     private int necesidades;
     private int salud;
+    private Estado estado;
 
     public String getNombre() {
         return nombre;
@@ -42,6 +43,14 @@ public class Mascota {
 
     public Etapa getEtapa() {
         return etapa;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
     public void setEtapa(Etapa etapa) {
@@ -121,14 +130,15 @@ public class Mascota {
     
     
     public Mascota() {
-        edad = 1;
+        edad = 0;
         etapa = Etapa.Huevo;
-        energia = 100;
-        hambre = 100;
-        aburrimiento = 0;
-        necesidades = 100;
-        salud = 100;
-        nombre=" ";
+        estado=Estado.Normal;
+        energia = 50;
+        hambre = 50;
+        aburrimiento = 50;
+        necesidades = 50;
+        salud = 50;
+        nombre="Tamagotchi";
     }
     public void nombrePet(){
         this.nombre=JOptionPane.showInputDialog(null, " INGRESE EL NOMBRE DE LA MASCOTA","NOMBRE MASCOTA", JOptionPane.QUESTION_MESSAGE);
@@ -144,11 +154,17 @@ public class Mascota {
     
 //    public static void main (String[] args){
 //        Mascota n=new Mascota();
-//       
-//        n.jugar();
-//        n.setEtapa(Etapa.Bebe);
-//        n.setNombre("Juan");
-//        n.setEtapa(Etapa.Adulto);
-//        System.out.println(n.getEnergia()+" = "+n.getAburrimiento());
+////       n.setEstado(Estado.Enfermo);
+////        n.jugar();
+////        n.setEtapa(Etapa.Bebe);
+////        n.setNombre("Juan");
+////        n.setEtapa(Etapa.Adulto);
+//        if (n.getAburrimiento()<90){
+//            n.setEstado(Estado.Enfermo);
+//            n.getEstado();
+//
+//        }
+//            
+//        System.out.println(n.getEstado()+" = "+n.getAburrimiento());
 //    }
 }

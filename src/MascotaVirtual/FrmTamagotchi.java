@@ -7,6 +7,19 @@ package MascotaVirtual;
 import RealizaMascota.Accion;
 import Actividad.Mascota.Actividad;
 import Actividad.Mascota.Correr;
+import Actividad.Mascota.Escondite;
+import Actividad.Mascota.Excavar;
+import Actividad.Mascota.Futbol;
+import Actividad.Mascota.Pasear;
+import Alimento.Mascota.Alimento;
+import Alimento.Mascota.Carne;
+import Alimento.Mascota.Concentrado;
+import Alimento.Mascota.Galletas;
+import Alimento.Mascota.Hueso;
+import Alimento.Mascota.Lechuga;
+import Medicina.Mascota.Inyeccion;
+import Medicina.Mascota.Medicina;
+import Medicina.Mascota.Pastilla;
 import Utilspet.Tiempo;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
@@ -21,32 +34,42 @@ import javax.swing.Timer;
 public final class FrmTamagotchi extends javax.swing.JFrame {
        private Tiempo time;
        private Mascota pet;
-       private Accion realiza;
-       int c1;
-       int c2;
-       int c3;
-       int c4;
-       int c5;
-       int cEdad;
-       int cEtapa=0;
+       private Actividad correr,escondite,excavar,futbol,pasear;
+       private Alimento carne,concentrado,galletas,hueso,lechuga;
+       private Medicina inyecion,pastilla;
+       int c1,c2,c3,c4,c5,cEdad,cEtapa;
+       
+    public void InstanciarActividad(){
+        //Actividad
+        correr=new Correr();
+        escondite=new Escondite();
+        excavar=new Excavar();
+        futbol=new Futbol();
+        pasear=new Pasear();
+        //Alimentos
+        carne=new Carne();
+        concentrado=new Concentrado();
+        galletas=new Galletas();
+        hueso=new Hueso();
+        lechuga=new Lechuga();
+        //Medicina
+        inyecion=new Inyeccion();
+        pastilla=new Pastilla();
+    }
+
     /**
      * Creates new form FrmTamagotchi
      */
     public FrmTamagotchi() {
         initComponents();
         this.setLocationRelativeTo(FrmTamagotchi.this);
-        realiza=new Accion();
         pet= new Mascota();
         time=new Tiempo();
+        InstanciarActividad();
         inicializar();
         nombre();
         iniciar();
-        c1=0;
-        c2=0;
-        c3=0;
-        c4=0;
-        c5=0;
-        cEdad=0;
+     
     }
     
     Timer timer = new Timer (1000, (ActionEvent e) -> {
@@ -55,7 +78,6 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         this.restaBanio();
         this.restaEnergia();
         this.restaHambre();
-        this.restaSalud();
         this.AumentaEdad();
         this.time.contar();
         this.etapa();
@@ -70,15 +92,15 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     */
     public void etapa(){
          int ed=Integer.parseInt(this.lblEdad.getText());
-        if(ed==30 ){
+        if(ed==5 ){
             pet.setEtapa(Etapa.Bebe);
             this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/BebeNormal.png")));
             this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
-        }if(ed==60){
+        }if(ed==10){
             pet.setEtapa(Etapa.Joven);
             this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/JovenNormal.png")));
             this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
-        }if(ed==90){
+        }if(ed==15){
             pet.setEtapa(Etapa.Adulto);
             this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Adulto Normal.png")));
             this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
@@ -88,16 +110,18 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     Metodo que inicializa las barras de estado,Edad,Etapa.
     */
     public void  inicializar(){ //Inicializa las barras de estado
+        this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perritoh.png")));
         this.barAburrimiento.setValue(pet.getAburrimiento());
         this.barBanio.setValue(pet.getNecesidades());
         this.barEnergia.setValue(pet.getEnergia());
         this.barHambre.setValue(pet.getHambre());
         this.barSalud.setValue(pet.getSalud());
-        this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perritoh.png")));
+        this.lblEstado.setText(String.valueOf(pet.getEstado()));
         this.lblEdad.setText(String.valueOf(pet.getEdad()));
         this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
-       
+        
     }
+   
     
     public void iniciar(){
 //         try {
@@ -130,8 +154,14 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         c1++;
         if (c1==5){
             pet.setAburrimiento(pet.getAburrimiento()+10);
-//            int get=this.barAburrimiento.getValue()+10;//le suma a la barra
             this.barAburrimiento.setValue(pet.getAburrimiento()); 
+            if(pet.getAburrimiento()>=90){
+                pet.setEstado(Estado.Enfermo);
+                this.lblEstado.setText(String.valueOf(pet.getEstado()));
+            }else{
+                pet.setEstado(Estado.Normal);
+                this.lblEstado.setText(String.valueOf(pet.getEstado())); 
+            }
            c1=0; 
         }
     }
@@ -139,7 +169,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     public void restaBanio(){//METODO PARA RESTAR LAS BARRAS
         c2++;
         if (c2==5){
-            pet.setNecesidades(pet.getNecesidades()-5);
+            pet.setNecesidades(pet.getNecesidades()+5);
            this.barBanio.setValue(pet.getNecesidades()); //obtiene el nuevo valor
            c2=0;
         }
@@ -156,20 +186,25 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
      public void restaHambre(){//METODO PARA RESTAR LAS BARRAS
          c4++;
          if (c4==5){
-           pet.setHambre(pet.getHambre()-5);
+           pet.setHambre(pet.getHambre()+5);
             this.barHambre.setValue(pet.getHambre());
             c4=0;
         }
      }
      
-     public void restaSalud(){//METODO PARA RESTAR LAS BARRAS
-         c5++;
-         if (c5==5 ){
-             pet.setSalud(pet.getSalud()-5);
-            this.barSalud.setValue(pet.getSalud());
-            
-            c5=0;
-        }
+     public void estadoSalud(){//METODO para indicar el estado de salud
+         
+         if(this.barAburrimiento.getValue()>=90){
+             pet.setEstado(Estado.Enfermo);
+             this.lblEstado.setText(String.valueOf(pet.getEstado()));
+         }
+//         c5++;
+//         if (c5==5 ){
+//             pet.setSalud(pet.getSalud()-5);
+//            this.barSalud.setValue(pet.getSalud());
+//            
+//            c5=0;
+//        }
      }
      
      public void sumaEnergia(){//METODO PARA RESTAR LAS BARRAS
@@ -205,11 +240,12 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         btnEnergia = new javax.swing.JButton();
         lblImagen = new javax.swing.JLabel();
         barEnergia = new javax.swing.JProgressBar();
+        lblEstado = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -281,14 +317,18 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         barEnergia.setStringPainted(true);
         jPanel1.add(barEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 98, 16));
 
-        jMenu1.setText("Opciones");
+        lblEstado.setText("Esatdo");
+        jPanel1.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 70, 20));
 
-        jMenuItem1.setText("jMenuItem1");
-        jMenu1.add(jMenuItem1);
+        jMenu1.setText("Opciones");
         jMenu1.add(jSeparator1);
 
-        jMenuItem2.setText("jMenuItem2");
-        jMenu1.add(jMenuItem2);
+        jMenu3.setText("jMenu3");
+
+        jMenuItem3.setText("jMenuItem3");
+        jMenu3.add(jMenuItem3);
+
+        jMenu1.add(jMenu3);
 
         jMenuBar1.add(jMenu1);
 
@@ -316,13 +356,10 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//         realiza.CorrerAct();
-//        this.barEnergia.setValue(pet.getEnergia());
-        Actividad n=new Correr();
-         pet.setEnergia(pet.getEnergia()-n.getEnergia());
+        pet.setEnergia(pet.getEnergia()-correr.getEnergia());//Para disminuir energia
           this.barEnergia.setValue(pet.getEnergia());
           
-         pet.setAburrimiento(pet.getAburrimiento()-n.getEntretenimiento());
+         pet.setAburrimiento(pet.getAburrimiento()-correr.getEntretenimiento());//para disminur Aburrimiento.
             this.barAburrimiento.setValue(pet.getAburrimiento());
           
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -379,15 +416,16 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel lblAburrimiento;
     private javax.swing.JLabel lblBanio;
     private javax.swing.JLabel lblEdad;
     private javax.swing.JLabel lblEnergia;
+    private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblEtapa;
     private javax.swing.JLabel lblHambre;
     private javax.swing.JLabel lblImagen;
