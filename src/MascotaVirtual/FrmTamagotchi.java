@@ -4,6 +4,9 @@
  */
 package MascotaVirtual;
 
+import RealizaMascota.Accion;
+import Actividad.Mascota.Actividad;
+import Actividad.Mascota.Correr;
 import Utilspet.Tiempo;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
@@ -18,7 +21,7 @@ import javax.swing.Timer;
 public final class FrmTamagotchi extends javax.swing.JFrame {
        private Tiempo time;
        private Mascota pet;
-       
+       private Accion realiza;
        int c1;
        int c2;
        int c3;
@@ -32,6 +35,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     public FrmTamagotchi() {
         initComponents();
         this.setLocationRelativeTo(FrmTamagotchi.this);
+        realiza=new Accion();
         pet= new Mascota();
         time=new Tiempo();
         inicializar();
@@ -45,10 +49,9 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         cEdad=0;
     }
     
-    Timer timer = new Timer (20, (ActionEvent e) -> {
+    Timer timer = new Timer (1000, (ActionEvent e) -> {
         this.lblTime.setText(time.toString());
-        
-        this.restaAburrimiento();
+        this.sumaAburrimiento();
         this.restaBanio();
         this.restaEnergia();
         this.restaHambre();
@@ -123,10 +126,12 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     /*
     Metodo para restar el aburrimiento
     */
-    public void restaAburrimiento(){//METODO PARA RESTAR LAS BARRAS
+    public void sumaAburrimiento(){//METODO PARA sumar LAS BARRA
         c1++;
         if (c1==5){
-            this.barAburrimiento.setValue(this.barAburrimiento.getValue()-20); 
+            pet.setAburrimiento(pet.getAburrimiento()+10);
+//            int get=this.barAburrimiento.getValue()+10;//le suma a la barra
+            this.barAburrimiento.setValue(pet.getAburrimiento()); 
            c1=0; 
         }
     }
@@ -134,7 +139,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     public void restaBanio(){//METODO PARA RESTAR LAS BARRAS
         c2++;
         if (c2==5){
-           this.barBanio.setValue(this.barBanio.getValue()-5); 
+            pet.setNecesidades(pet.getNecesidades()-5);
+           this.barBanio.setValue(pet.getNecesidades()); //obtiene el nuevo valor
            c2=0;
         }
     }
@@ -142,14 +148,16 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     public void restaEnergia(){//METODO PARA RESTAR LAS BARRAS
         c3++;
         if (c3==5){
-            this.barEnergia.setValue(this.barEnergia.getValue()-15);
+           pet.setEnergia(pet.getEnergia()-5);
+            this.barEnergia.setValue(pet.getEnergia());
             c3=0;
         }
     }
      public void restaHambre(){//METODO PARA RESTAR LAS BARRAS
          c4++;
          if (c4==5){
-            this.barHambre.setValue(this.barHambre.getValue()-5);
+           pet.setHambre(pet.getHambre()-5);
+            this.barHambre.setValue(pet.getHambre());
             c4=0;
         }
      }
@@ -157,15 +165,17 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
      public void restaSalud(){//METODO PARA RESTAR LAS BARRAS
          c5++;
          if (c5==5 ){
-            this.barSalud.setValue(this.barSalud.getValue()-5);
+             pet.setSalud(pet.getSalud()-5);
+            this.barSalud.setValue(pet.getSalud());
             
             c5=0;
         }
      }
      
      public void sumaEnergia(){//METODO PARA RESTAR LAS BARRAS
-         if (this.barEnergia.getValue()<100){
-           this.barEnergia.setValue(barEnergia.getValue()+10); 
+         if (pet.getEnergia()<100){
+             pet.setEnergia(pet.getEnergia()+10);
+           this.barEnergia.setValue(pet.getEnergia()); 
         }
      }
     /**
@@ -253,7 +263,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 390, -1, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, -1, -1));
 
         lblTime.setText("Time");
         jPanel1.add(lblTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 360, 97, -1));
@@ -264,14 +274,14 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
                 btnEnergiaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 390, -1, -1));
+        jPanel1.add(btnEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 390, -1, -1));
         jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 270, 230));
 
         barEnergia.setBackground(new java.awt.Color(0, 153, 0));
         barEnergia.setStringPainted(true);
         jPanel1.add(barEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 98, 16));
 
-        jMenu1.setText("File");
+        jMenu1.setText("Opciones");
 
         jMenuItem1.setText("jMenuItem1");
         jMenu1.add(jMenuItem1);
@@ -306,15 +316,15 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        if (this.barAburrimiento.getValue()==10){
-//            
-//        }else{
-//            this.barAburrimiento.setValue(this.barAburrimiento.getValue()-5);// para restarle a la barra 
-//        }
-      
-        
-//        pet.nombrePet();
-//        this.lblNombre.setText(pet.getNombre());
+//         realiza.CorrerAct();
+//        this.barEnergia.setValue(pet.getEnergia());
+        Actividad n=new Correr();
+         pet.setEnergia(pet.getEnergia()-n.getEnergia());
+          this.barEnergia.setValue(pet.getEnergia());
+          
+         pet.setAburrimiento(pet.getAburrimiento()-n.getEntretenimiento());
+            this.barAburrimiento.setValue(pet.getAburrimiento());
+          
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnEnergiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnergiaActionPerformed

@@ -4,6 +4,8 @@
  */
 package MascotaVirtual;
 
+import Actividad.Mascota.Actividad;
+import Actividad.Mascota.Correr;
 import javax.swing.JOptionPane;
 
 /**
@@ -123,7 +125,7 @@ public class Mascota {
         etapa = Etapa.Huevo;
         energia = 100;
         hambre = 100;
-        aburrimiento = 100;
+        aburrimiento = 0;
         necesidades = 100;
         salud = 100;
         nombre=" ";
@@ -132,12 +134,21 @@ public class Mascota {
         this.nombre=JOptionPane.showInputDialog(null, " INGRESE EL NOMBRE DE LA MASCOTA","NOMBRE MASCOTA", JOptionPane.QUESTION_MESSAGE);
     }
    
+//    public void jugar() {
+//         Correr co=new Correr();
+//        setEnergia(co.getEnergia());
+//        setAburrimiento(getAburrimiento() - co.getEntretenimiento());
+//    }
+    
+    
     
 //    public static void main (String[] args){
 //        Mascota n=new Mascota();
+//       
+//        n.jugar();
 //        n.setEtapa(Etapa.Bebe);
 //        n.setNombre("Juan");
 //        n.setEtapa(Etapa.Adulto);
-//        System.out.println(n.getEtapa()+" = "+n.getNombre());
+//        System.out.println(n.getEnergia()+" = "+n.getAburrimiento());
 //    }
 }
