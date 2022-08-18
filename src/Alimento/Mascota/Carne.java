@@ -8,7 +8,7 @@ package Alimento.Mascota;
 public class Carne extends Alimento{
 
     public Carne() {
-        super(15, 30, 20);
+        super(15, 10, 20);
     }
     
 }

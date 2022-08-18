@@ -10,7 +10,7 @@ package Medicina.Mascota;
  */
 public class Pastilla extends Medicina{
     public Pastilla(){
-        super(20);
+        super(10);
     }
     
 }

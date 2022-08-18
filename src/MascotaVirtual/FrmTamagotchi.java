@@ -44,6 +44,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
        private Medicina inyeccion,pastilla;
        
        int c1,c2,c3,c4,c5,cEdad,cEtapa;
+       int contador1,contador2,contador3,contador4,contador5,contador6,contador7;
        
     public void InstanciarActividad(){
         //Actividad
@@ -91,8 +92,101 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         this.etapa();
         nivelCritico();
         murio();
+       
         
     });
+    Timer time1 = new Timer (1000, (ActionEvent e) -> {
+       desabilitarInyeccion();
+//       desabilitarPastillas();
+//       desabilitarCarne();
+//       desabilitarConcentrado();
+//       desabilitarGalletas();
+//       desabilitarLechuga();
+//       desabilitarHueso();
+    });
+      Timer time2 = new Timer (1000, (ActionEvent e) -> {
+       desabilitarPastillas();
+    });
+       Timer time3 = new Timer (1000, (ActionEvent e) -> {
+       desabilitarCarne();
+    });  
+       Timer time4 = new Timer (1000, (ActionEvent e) -> {
+      desabilitarConcentrado();
+    });
+         Timer time5 = new Timer (1000, (ActionEvent e) -> {
+       desabilitarGalletas();
+    });
+         Timer time6 = new Timer (1000, (ActionEvent e) -> {
+       desabilitarHueso();
+    });
+           Timer time7 = new Timer (1000, (ActionEvent e) -> {
+       desabilitarLechuga();
+    });
+    
+    public void desabilitarInyeccion(){//
+         contador1++;
+        System.out.println(contador1);
+        if (contador1==inyeccion.getTiempo() ){
+            this.miInyeccion.setEnabled(true);
+            contador1=0;
+            time1.stop();
+        }
+    }
+    public void desabilitarPastillas(){//
+         contador7++;
+        System.out.println(contador7);
+        if (contador7==pastilla.getTiempo() ){
+            this.miPastilla.setEnabled(true);
+            contador7=0;
+            time2.stop();
+        }
+    }
+    public void desabilitarCarne(){//
+         contador2++;
+        System.out.println(contador2);
+        if (contador2==carne.getTiempo() ){
+            this.miCarne.setEnabled(true);
+            contador2=0;
+            time3.stop();
+        }
+    }
+    public void desabilitarConcentrado(){//
+         contador3++;
+        System.out.println(contador3);
+        if (contador3==concentrado.getTiempo() ){
+            this.miConsentrado.setEnabled(true);
+            contador3=0;
+            time4.stop();
+        }
+    }
+    public void desabilitarGalletas(){//
+         contador4++;
+        System.out.println(contador4);
+        if (contador4==galletas.getTiempo() ){
+            this.btnBanio.setEnabled(true);
+            contador4=0;
+            time5.stop();
+        }
+    }
+    public void desabilitarHueso(){//
+         contador5++;
+        System.out.println(contador5);
+        if (contador5==hueso.getTiempo() ){
+            this.btnBanio.setEnabled(true);
+            contador5=0;
+            time6.stop();
+        }
+    }
+    public void desabilitarLechuga(){//
+         contador6++;
+        System.out.println(contador6);
+        if (contador6==lechuga.getTiempo() ){
+            this.btnBanio.setEnabled(true);
+            contador6=0;
+            time7.stop();
+        }
+    }
+    
     
     /*
     Metodo que inicializa las barras de estado,Edad,Etapa.
@@ -593,7 +687,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBanioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanioActionPerformed
-       pet.setNecesidades(pet.getNecesidades()-Mascota.BANIO);
+     
+        pet.setNecesidades(pet.getNecesidades()-Mascota.BANIO);
         this.barBanio.setValue(pet.getNecesidades());
          this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosBotones/toiletpaper.png")));
         
@@ -601,7 +696,6 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
 
     private void btnDormirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDormirActionPerformed
         Modifica();
-        
         
      if(pet.getEdad()<10){
             
@@ -618,6 +712,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDormirActionPerformed
 
     private void miCarneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCarneActionPerformed
+        this.miCarne.setEnabled(false);
+        time3.start();
         pet.setEnergia(pet.getEnergia()+carne.getEnergia());//Para aumentar energia
           this.barEnergia.setValue(pet.getEnergia());
           
@@ -626,6 +722,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miCarneActionPerformed
 
     private void miConsentradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miConsentradoActionPerformed
+        this.miConsentrado.setEnabled(false);
+        time4.start();
         pet.setEnergia(pet.getEnergia()+concentrado.getEnergia());//Para aumentar energia
           this.barEnergia.setValue(pet.getEnergia());
           
@@ -634,6 +732,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miConsentradoActionPerformed
 
     private void miCorrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCorrerActionPerformed
+        
         pet.setEnergia(pet.getEnergia()-correr.getEnergia());//Para disminuir energia
           this.barEnergia.setValue(pet.getEnergia());
           
@@ -642,6 +741,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miCorrerActionPerformed
 
     private void miHuesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miHuesoActionPerformed
+        this.miHueso.setEnabled(false);
+        time6.start();
         pet.setEnergia(pet.getEnergia()+hueso.getEnergia());//Para aumentar energia
           this.barEnergia.setValue(pet.getEnergia());
           
@@ -650,6 +751,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miHuesoActionPerformed
 
     private void miExcavarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miExcavarActionPerformed
+       
         pet.setEnergia(pet.getEnergia()-excavar.getEnergia());//Para disminuir energia
           this.barEnergia.setValue(pet.getEnergia());
           
@@ -658,6 +760,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miExcavarActionPerformed
 
     private void miEsconditeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEsconditeActionPerformed
+        
         pet.setEnergia(pet.getEnergia()-escondite.getEnergia());//Para disminuir energia
           this.barEnergia.setValue(pet.getEnergia());
           
@@ -666,7 +769,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miEsconditeActionPerformed
 
     private void miPasearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPasearActionPerformed
-       pet.setEnergia(pet.getEnergia()-pasear.getEnergia());//Para disminuir energia
+       
+        pet.setEnergia(pet.getEnergia()-pasear.getEnergia());//Para disminuir energia
           this.barEnergia.setValue(pet.getEnergia());
           
          pet.setAburrimiento(pet.getAburrimiento()-pasear.getEntretenimiento());//para disminur Aburrimiento.
@@ -674,7 +778,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miPasearActionPerformed
 
     private void miFutbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miFutbolActionPerformed
-       pet.setEnergia(pet.getEnergia()-futbol.getEnergia());//Para disminuir energia
+       time2.start();
+        pet.setEnergia(pet.getEnergia()-futbol.getEnergia());//Para disminuir energia
           this.barEnergia.setValue(pet.getEnergia());
           
          pet.setAburrimiento(pet.getAburrimiento()-futbol.getEntretenimiento());//para disminur Aburrimiento.
@@ -682,6 +787,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miFutbolActionPerformed
 
     private void miLechugaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLechugaActionPerformed
+        this.miLechuga.setEnabled(false);
+        time7.start();
         pet.setEnergia(pet.getEnergia()+lechuga.getEnergia());//Para aumentar energia
           this.barEnergia.setValue(pet.getEnergia());
           
@@ -690,6 +797,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miLechugaActionPerformed
 
     private void miGalletasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miGalletasActionPerformed
+        this.miLechuga.setEnabled(false);
+        time5.start();
         pet.setEnergia(pet.getEnergia()+galletas.getEnergia());//Para aumentar energia
           this.barEnergia.setValue(pet.getEnergia());
           
@@ -698,7 +807,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miGalletasActionPerformed
 
     private void miInyeccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miInyeccionActionPerformed
-        
+        this.miInyeccion.setEnabled(false);
+        time1.start();
         pet.setEnergia(pet.getEnergia()+inyeccion.getCuracion());//Para aumentar energia
           this.barEnergia.setValue(pet.getEnergia());
           
@@ -713,6 +823,9 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     }//GEN-LAST:event_miInyeccionActionPerformed
 
     private void miPastillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPastillaActionPerformed
+        this.miPastilla.setEnabled(false);
+        time2.start();
+        
         pet.setEnergia(pet.getEnergia()+pastilla.getCuracion());//Para aumentar energia
           this.barEnergia.setValue(pet.getEnergia());
           
