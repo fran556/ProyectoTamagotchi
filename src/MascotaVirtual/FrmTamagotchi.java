@@ -97,12 +97,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     });
     Timer time1 = new Timer (1000, (ActionEvent e) -> {
        desabilitarInyeccion();
-//       desabilitarPastillas();
-//       desabilitarCarne();
-//       desabilitarConcentrado();
-//       desabilitarGalletas();
-//       desabilitarLechuga();
-//       desabilitarHueso();
+
     });
       Timer time2 = new Timer (1000, (ActionEvent e) -> {
        desabilitarPastillas();
