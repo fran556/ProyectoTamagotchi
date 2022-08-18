@@ -27,6 +27,8 @@ import java.awt.event.ActionListener;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 //import java.util.concurrent.TimeUnit;
@@ -42,6 +44,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
        private Actividad correr,escondite,excavar,futbol,pasear;
        private Alimento carne,concentrado,galletas,hueso,lechuga;
        private Medicina inyeccion,pastilla;
+       private Clip clip;
+    private String ruta;
        
        int c1,c2,c3,c4,c5,cEdad,cEtapa;
        int contador1,contador2,contador3,contador4,contador5,contador6,contador7;
@@ -77,8 +81,16 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         inicializar();
         nombre();
         iniciar();
-        
-     
+        ruta="/sonidos/";
+       
+    }
+    public void sonido(String archivo){
+        try {
+            clip=AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream(this.ruta+archivo+".wav")));
+            clip.start();
+        } catch (Exception e) {
+        }
     }
     
     Timer timer = new Timer (1000, (ActionEvent e) -> {
@@ -236,6 +248,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
              pet.getEnergia()==0 && pet.getHambre()==100 || pet.getAburrimiento()==100 && pet.getEnergia()==0 ||
              pet.getNecesidades()==100  && pet.getHambre()==100){
             pet.setEstado(Estado.Murio);
+            sonido("jingles_NES00");
             this.lblEstado.setText(String.valueOf(pet.getEstado()));
             
                 this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Murio.png")));
