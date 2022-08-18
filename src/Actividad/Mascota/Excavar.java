@@ -10,6 +10,6 @@ package Actividad.Mascota;
  */
 public class Excavar extends Actividad {
     public Excavar(){
-      super(10,20);  //pasamos por parametro energia y entretenimiento
+      super(8,10);  //pasamos por parametro energia y entretenimiento
     }
 }

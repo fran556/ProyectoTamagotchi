@@ -22,6 +22,7 @@ public class Mascota {
     private int necesidades;
     private int salud;
     private Estado estado;
+    public static final int BANIO=100;
 
     public String getNombre() {
         return nombre;
@@ -132,7 +133,7 @@ public class Mascota {
     public Mascota() {
         edad = 0;
         etapa = Etapa.Huevo;
-        estado=Estado.Normal;
+        estado=Estado.Saludable;
         energia = 50;
         hambre = 50;
         aburrimiento = 50;

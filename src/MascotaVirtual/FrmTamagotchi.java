@@ -21,7 +21,12 @@ import Medicina.Mascota.Inyeccion;
 import Medicina.Mascota.Medicina;
 import Medicina.Mascota.Pastilla;
 import Utilspet.Tiempo;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 //import java.util.concurrent.TimeUnit;
@@ -36,7 +41,8 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
        private Mascota pet;
        private Actividad correr,escondite,excavar,futbol,pasear;
        private Alimento carne,concentrado,galletas,hueso,lechuga;
-       private Medicina inyecion,pastilla;
+       private Medicina inyeccion,pastilla;
+       
        int c1,c2,c3,c4,c5,cEdad,cEtapa;
        
     public void InstanciarActividad(){
@@ -53,7 +59,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         hueso=new Hueso();
         lechuga=new Lechuga();
         //Medicina
-        inyecion=new Inyeccion();
+        inyeccion=new Inyeccion();
         pastilla=new Pastilla();
     }
 
@@ -63,26 +69,46 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     public FrmTamagotchi() {
         initComponents();
         this.setLocationRelativeTo(FrmTamagotchi.this);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/iconosbotones/tamago.png")));
         pet= new Mascota();
         time=new Tiempo();
         InstanciarActividad();
         inicializar();
         nombre();
         iniciar();
+        
      
     }
     
     Timer timer = new Timer (1000, (ActionEvent e) -> {
-        this.lblTime.setText(time.toString());
+        
         this.sumaAburrimiento();
-        this.restaBanio();
+        this.sumaBanio();
         this.restaEnergia();
         this.restaHambre();
         this.AumentaEdad();
         this.time.contar();
         this.etapa();
+        nivelCritico();
+        murio();
+        
     });
     
+    /*
+    Metodo que inicializa las barras de estado,Edad,Etapa.
+    */
+    public void  inicializar(){ //Inicializa las barras de estado
+        this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perritoh.png")));
+        this.barAburrimiento.setValue(pet.getAburrimiento());
+        this.barBanio.setValue(pet.getNecesidades());
+        this.barEnergia.setValue(pet.getEnergia());
+        this.barHambre.setValue(pet.getHambre());
+        
+        this.lblEstado.setText(String.valueOf(pet.getEstado()));
+        this.lblEdad.setText(String.valueOf(pet.getEdad()));
+        this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
+        
+    }
     public void nombre(){
         pet.nombrePet();
         lblNombre.setText(pet.getNombre());
@@ -106,22 +132,6 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
             this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
         }
     }
-    /*
-    Metodo que inicializa las barras de estado,Edad,Etapa.
-    */
-    public void  inicializar(){ //Inicializa las barras de estado
-        this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perritoh.png")));
-        this.barAburrimiento.setValue(pet.getAburrimiento());
-        this.barBanio.setValue(pet.getNecesidades());
-        this.barEnergia.setValue(pet.getEnergia());
-        this.barHambre.setValue(pet.getHambre());
-        this.barSalud.setValue(pet.getSalud());
-        this.lblEstado.setText(String.valueOf(pet.getEstado()));
-        this.lblEdad.setText(String.valueOf(pet.getEdad()));
-        this.lblEtapa.setText(String.valueOf(pet.getEtapa()));
-        
-    }
-   
     
     public void iniciar(){
 //         try {
@@ -130,8 +140,49 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
 //        } catch (InterruptedException ex) {
            
 //        }//
-        
     }
+    
+    public void murio(){
+         if (pet.getAburrimiento()==100 && pet.getNecesidades()==100 ||
+             pet.getEnergia()==0 && pet.getHambre()==100 || pet.getAburrimiento()==100 && pet.getEnergia()==0 ||
+             pet.getNecesidades()==100  && pet.getHambre()==100  ){
+            pet.setEstado(Estado.Murio);
+            this.lblEstado.setText(String.valueOf(pet.getEstado()));
+            
+                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Murio.png")));
+                timer.stop();
+            }
+         
+    }
+    public void nivelCritico(){
+         if (pet.getAburrimiento()>=90 || pet.getNecesidades()>=90 || pet.getEnergia()<=10 || pet.getHambre()>=90 ){
+            pet.setEstado(Estado.Enfermo);
+            this.lblEstado.setText(String.valueOf(pet.getEstado()));
+            if (pet.getEdad()<10){
+                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/HuevoEnfermo.png")));
+            }else if(pet.getEdad()<20){
+                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/BebeEnfermo.png")));
+             } else if (pet.getEdad()<30){
+                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/JovenEnfermo.png")));
+             }else{
+                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/AdultoEnfermo.png")));
+            }   
+            //verificar cuando cambia    
+        }else{
+            if (pet.getEdad()<10){
+                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perritoh.png")));
+            }else if(pet.getEdad()<20){
+                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/BebeNormal.png")));
+            }else if(pet.getEdad()<30 ){
+                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/JovenNormal.png")));
+            }else{
+                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Adulto Normal.png")));
+                }               
+            pet.setEstado(Estado.Saludable);
+            this.lblEstado.setText(String.valueOf(pet.getEstado()));                
+       }
+    }
+    
     /*
     Metodo que aumenta la edad.
     */
@@ -155,34 +206,20 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         if (c1==5){
             pet.setAburrimiento(pet.getAburrimiento()+10);//suma al aburrimiento
             this.barAburrimiento.setValue(pet.getAburrimiento()); 
-           c1=0; 
+            c1=0; 
         }
-        
-        if(pet.getAburrimiento()>=90  ){
-                pet.setEstado(Estado.Enfermo);
-                this.lblEstado.setText(String.valueOf(pet.getEstado()));
-//                if(pet.getEdad()<5){
-                    this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/HuevoEnfermo.png")));
-//                }
-                    //verificar cuando cambia
-                
-            }else{
-                pet.setEstado(Estado.Normal);
-                this.lblEstado.setText(String.valueOf(pet.getEstado()));
-                this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/perritoh.png")));
-            }
-        
-        
+       
         
     }
     
-    public void restaBanio(){//METODO PARA RESTAR LAS BARRAS
+    public void sumaBanio(){//METODO PARA RESTAR LAS BARRAS
         c2++;
-        if (c2==5){
-            pet.setNecesidades(pet.getNecesidades()+5);
+        if (c2==7){
+            pet.setNecesidades(pet.getNecesidades()+10);
            this.barBanio.setValue(pet.getNecesidades()); //obtiene el nuevo valor
            c2=0;
         }
+//      
     }
     
     public void restaEnergia(){//METODO PARA RESTAR LAS BARRAS
@@ -201,27 +238,21 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
             c4=0;
         }
      }
+      
      
-     public void estadoSalud(){//METODO para indicar el estado de salud
-         
-         if(this.barAburrimiento.getValue()>=90){
-             pet.setEstado(Estado.Enfermo);
-             this.lblEstado.setText(String.valueOf(pet.getEstado()));
-         }
-//         c5++;
-//         if (c5==5 ){
-//             pet.setSalud(pet.getSalud()-5);
-//            this.barSalud.setValue(pet.getSalud());
-//            
-//            c5=0;
-//        }
-     }
-     
-     public void sumaEnergia(){//METODO PARA RESTAR LAS BARRAS
-         if (pet.getEnergia()<100){
-             pet.setEnergia(pet.getEnergia()+10);
-           this.barEnergia.setValue(pet.getEnergia()); 
-        }
+     public void Modifica(){//METODO PARA RESTAR LAS BARRAS
+       pet.setEnergia(pet.getEnergia()+15);
+       this.barEnergia.setValue(pet.getEnergia());
+       
+//       pet.setAburrimiento(pet.getAburrimiento()-3);
+//       this.barAburrimiento.setValue(pet.getAburrimiento());
+       
+        pet.setHambre(pet.getHambre()+3);
+        this.barHambre.setValue(pet.getHambre());
+        
+        pet.setNecesidades(pet.getNecesidades()+3);
+       this.barBanio.setValue(pet.getNecesidades());
+        
      }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -232,11 +263,11 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator2 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         barAburrimiento = new javax.swing.JProgressBar();
         barHambre = new javax.swing.JProgressBar();
         barBanio = new javax.swing.JProgressBar();
-        barSalud = new javax.swing.JProgressBar();
         lblEnergia = new javax.swing.JLabel();
         lblHambre = new javax.swing.JLabel();
         lblBanio = new javax.swing.JLabel();
@@ -245,105 +276,305 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         lblNombre = new javax.swing.JLabel();
         lblEdad = new javax.swing.JLabel();
         lblEtapa = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        lblTime = new javax.swing.JLabel();
-        btnEnergia = new javax.swing.JButton();
+        btnBanio = new javax.swing.JButton();
+        btnDormir = new javax.swing.JButton();
         lblImagen = new javax.swing.JLabel();
         barEnergia = new javax.swing.JProgressBar();
         lblEstado = new javax.swing.JLabel();
+        lblSalud1 = new javax.swing.JLabel();
+        lblSalud2 = new javax.swing.JLabel();
+        lblSalud3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        mActividades = new javax.swing.JMenu();
+        miExcavar = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
+        miCorrer = new javax.swing.JMenuItem();
+        jSeparator9 = new javax.swing.JPopupMenu.Separator();
+        miEscondite = new javax.swing.JMenuItem();
+        jSeparator10 = new javax.swing.JPopupMenu.Separator();
+        miPasear = new javax.swing.JMenuItem();
+        jSeparator11 = new javax.swing.JPopupMenu.Separator();
+        miFutbol = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
+        miMedicina = new javax.swing.JMenu();
+        miInyeccion = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
+        miPastilla = new javax.swing.JMenuItem();
+        jSeparator12 = new javax.swing.JPopupMenu.Separator();
+        mAlimentos = new javax.swing.JMenu();
+        miConsentrado = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        miHueso = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        miLechuga = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        miCarne = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        miGalletas = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("TAMAGOTCHI");
 
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         barAburrimiento.setBackground(new java.awt.Color(0, 153, 0));
+        barAburrimiento.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        barAburrimiento.setOpaque(true);
         barAburrimiento.setStringPainted(true);
-        jPanel1.add(barAburrimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 98, 16));
+        jPanel1.add(barAburrimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, 98, 16));
 
         barHambre.setBackground(new java.awt.Color(0, 153, 0));
+        barHambre.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        barHambre.setBorder(null);
+        barHambre.setOpaque(true);
         barHambre.setStringPainted(true);
-        jPanel1.add(barHambre, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 98, 16));
+        jPanel1.add(barHambre, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 380, 98, 16));
 
         barBanio.setBackground(new java.awt.Color(0, 153, 0));
+        barBanio.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        barBanio.setOpaque(true);
         barBanio.setStringPainted(true);
-        jPanel1.add(barBanio, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, 98, 16));
+        jPanel1.add(barBanio, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 380, 98, 16));
 
-        barSalud.setBackground(new java.awt.Color(0, 153, 0));
-        barSalud.setStringPainted(true);
-        jPanel1.add(barSalud, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 50, 98, 16));
-
+        lblEnergia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblEnergia.setForeground(new java.awt.Color(0, 0, 204));
         lblEnergia.setText("Energia");
-        jPanel1.add(lblEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, 48, -1));
+        jPanel1.add(lblEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 360, 60, -1));
 
+        lblHambre.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblHambre.setForeground(new java.awt.Color(0, 0, 204));
         lblHambre.setText("Hambre");
-        jPanel1.add(lblHambre, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, 48, -1));
+        jPanel1.add(lblHambre, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 360, 60, -1));
 
+        lblBanio.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblBanio.setForeground(new java.awt.Color(0, 0, 204));
         lblBanio.setText("Baño");
-        jPanel1.add(lblBanio, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, 48, -1));
+        jPanel1.add(lblBanio, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 360, 60, -1));
 
-        lblSalud.setText("Salud");
-        jPanel1.add(lblSalud, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 30, 48, -1));
+        lblSalud.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblSalud.setForeground(new java.awt.Color(0, 0, 255));
+        lblSalud.setText("Nombre");
+        jPanel1.add(lblSalud, new org.netbeans.lib.awtextra.AbsoluteConstraints(518, 20, 60, 10));
 
+        lblAburrimiento.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblAburrimiento.setForeground(new java.awt.Color(0, 0, 204));
         lblAburrimiento.setText("Aburrimiento");
-        jPanel1.add(lblAburrimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 72, -1));
+        jPanel1.add(lblAburrimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 360, -1, -1));
 
+        lblNombre.setBackground(new java.awt.Color(145, 175, 63));
+        lblNombre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNombre.setText("Nombre");
-        jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
+        lblNombre.setOpaque(true);
+        jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 10, 100, 30));
 
+        lblEdad.setBackground(new java.awt.Color(145, 175, 63));
+        lblEdad.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblEdad.setText("Edad");
-        jPanel1.add(lblEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 50, -1));
+        lblEdad.setOpaque(true);
+        jPanel1.add(lblEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 50, 100, 30));
 
-        lblEtapa.setText("Etapa");
-        jPanel1.add(lblEtapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 70, -1));
+        lblEtapa.setBackground(new java.awt.Color(145, 175, 63));
+        lblEtapa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblEtapa.setOpaque(true);
+        jPanel1.add(lblEtapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 90, 100, 30));
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnBanio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/icons8-dog-pee-50.png"))); // NOI18N
+        btnBanio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnBanioActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, -1, -1));
+        jPanel1.add(btnBanio, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 210, 100, 80));
 
-        lblTime.setText("Time");
-        jPanel1.add(lblTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 360, 97, -1));
-
-        btnEnergia.setText("jButton2");
-        btnEnergia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnergiaActionPerformed(evt);
+        btnDormir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/dormir.png"))); // NOI18N
+        btnDormir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnDormirMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                btnDormirMouseReleased(evt);
             }
         });
-        jPanel1.add(btnEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 390, -1, -1));
-        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 270, 230));
+        btnDormir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDormirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnDormir, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 310, 100, 90));
+        jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 100, 310, 230));
 
         barEnergia.setBackground(new java.awt.Color(0, 153, 0));
+        barEnergia.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        barEnergia.setOpaque(true);
         barEnergia.setStringPainted(true);
-        jPanel1.add(barEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 98, 16));
+        jPanel1.add(barEnergia, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 380, 98, 16));
 
-        lblEstado.setText("Esatdo");
-        jPanel1.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 70, 20));
+        lblEstado.setBackground(new java.awt.Color(145, 175, 63));
+        lblEstado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblEstado.setOpaque(true);
+        jPanel1.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 130, 100, 30));
 
-        jMenu1.setText("Opciones");
-        jMenu1.add(jSeparator1);
+        lblSalud1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblSalud1.setForeground(new java.awt.Color(0, 0, 255));
+        lblSalud1.setText("Salud");
+        jPanel1.add(lblSalud1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 130, 48, -1));
 
-        jMenu3.setText("jMenu3");
+        lblSalud2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblSalud2.setForeground(new java.awt.Color(0, 0, 255));
+        lblSalud2.setText("Etapa");
+        jPanel1.add(lblSalud2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 90, 48, -1));
 
-        jMenuItem3.setText("jMenuItem3");
-        jMenu3.add(jMenuItem3);
+        lblSalud3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblSalud3.setForeground(new java.awt.Color(0, 0, 255));
+        lblSalud3.setText("Edad");
+        jPanel1.add(lblSalud3, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 50, 48, -1));
 
-        jMenu1.add(jMenu3);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/istockphoto-1309902693-170667a.png"))); // NOI18N
+        jLabel1.setText("jLabel1");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-50, 10, 750, 420));
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.setBackground(new java.awt.Color(196, 221, 217));
+        jMenuBar1.setOpaque(true);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        mActividades.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/fisico.png"))); // NOI18N
+        mActividades.setText("Actividades");
+        mActividades.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        mActividades.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        miExcavar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/cavar.png"))); // NOI18N
+        miExcavar.setText("Excavar");
+        miExcavar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miExcavarActionPerformed(evt);
+            }
+        });
+        mActividades.add(miExcavar);
+        mActividades.add(jSeparator7);
+
+        miCorrer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/silueta-de-perro-corriendo.png"))); // NOI18N
+        miCorrer.setText("Correr");
+        miCorrer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCorrerActionPerformed(evt);
+            }
+        });
+        mActividades.add(miCorrer);
+        mActividades.add(jSeparator9);
+
+        miEscondite.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/oculto.png"))); // NOI18N
+        miEscondite.setText("Escondite");
+        miEscondite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miEsconditeActionPerformed(evt);
+            }
+        });
+        mActividades.add(miEscondite);
+        mActividades.add(jSeparator10);
+
+        miPasear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/corriendo.png"))); // NOI18N
+        miPasear.setText("Pasear");
+        miPasear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPasearActionPerformed(evt);
+            }
+        });
+        mActividades.add(miPasear);
+        mActividades.add(jSeparator11);
+
+        miFutbol.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/futbol (1).png"))); // NOI18N
+        miFutbol.setText("Futbol");
+        miFutbol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miFutbolActionPerformed(evt);
+            }
+        });
+        mActividades.add(miFutbol);
+        mActividades.add(jSeparator6);
+
+        jMenuBar1.add(mActividades);
+
+        miMedicina.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/kit-de-primeros-auxilios.png"))); // NOI18N
+        miMedicina.setText("Medicina");
+        miMedicina.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        miInyeccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/vacuna.png"))); // NOI18N
+        miInyeccion.setText("Inyeccion");
+        miInyeccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miInyeccionActionPerformed(evt);
+            }
+        });
+        miMedicina.add(miInyeccion);
+        miMedicina.add(jSeparator8);
+
+        miPastilla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/medicamento.png"))); // NOI18N
+        miPastilla.setText("Pastilla");
+        miPastilla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPastillaActionPerformed(evt);
+            }
+        });
+        miMedicina.add(miPastilla);
+        miMedicina.add(jSeparator12);
+
+        jMenuBar1.add(miMedicina);
+
+        mAlimentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/healthy-food.png"))); // NOI18N
+        mAlimentos.setText("Alimentos");
+        mAlimentos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        miConsentrado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/dog-bowl.png"))); // NOI18N
+        miConsentrado.setText("Concentrado");
+        miConsentrado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miConsentradoActionPerformed(evt);
+            }
+        });
+        mAlimentos.add(miConsentrado);
+        mAlimentos.add(jSeparator1);
+
+        miHueso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/dog-treat.png"))); // NOI18N
+        miHueso.setText("Hueso");
+        miHueso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miHuesoActionPerformed(evt);
+            }
+        });
+        mAlimentos.add(miHueso);
+        mAlimentos.add(jSeparator3);
+
+        miLechuga.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/lettuce.png"))); // NOI18N
+        miLechuga.setText("Lechuga");
+        miLechuga.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miLechugaActionPerformed(evt);
+            }
+        });
+        mAlimentos.add(miLechuga);
+        mAlimentos.add(jSeparator4);
+
+        miCarne.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/meat.png"))); // NOI18N
+        miCarne.setText("Carne");
+        miCarne.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCarneActionPerformed(evt);
+            }
+        });
+        mAlimentos.add(miCarne);
+        mAlimentos.add(jSeparator5);
+
+        miGalletas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/pet-food.png"))); // NOI18N
+        miGalletas.setText("Galletas");
+        miGalletas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miGalletasActionPerformed(evt);
+            }
+        });
+        mAlimentos.add(miGalletas);
+
+        jMenuBar1.add(mAlimentos);
 
         setJMenuBar(jMenuBar1);
 
@@ -351,35 +582,157 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnBanioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanioActionPerformed
+       pet.setNecesidades(pet.getNecesidades()-Mascota.BANIO);
+        this.barBanio.setValue(pet.getNecesidades());
+         this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconosBotones/toiletpaper.png")));
+        
+    }//GEN-LAST:event_btnBanioActionPerformed
+
+    private void btnDormirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDormirActionPerformed
+        Modifica();
+        
+        
+     if(pet.getEdad()<10){
+            
+         this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/HuevoDormido.png")));
+        }else if(pet.getEdad()<20){
+            this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/BebeDurmiendo.png")));
+        } else if(pet.getEdad()<30){
+            this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/JovenDurmiendo.png")));
+        }else{
+            this.lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/AdultoDurmiendo.png")));
+        } 
+       
+
+    }//GEN-LAST:event_btnDormirActionPerformed
+
+    private void miCarneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCarneActionPerformed
+        pet.setEnergia(pet.getEnergia()+carne.getEnergia());//Para aumentar energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+         pet.setHambre(pet.getHambre()-carne.getSatisfaccion());//para disminur Hambre
+            this.barHambre.setValue(pet.getHambre());
+    }//GEN-LAST:event_miCarneActionPerformed
+
+    private void miConsentradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miConsentradoActionPerformed
+        pet.setEnergia(pet.getEnergia()+concentrado.getEnergia());//Para aumentar energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+         pet.setHambre(pet.getHambre()-concentrado.getSatisfaccion());//para disminur Hambre
+            this.barHambre.setValue(pet.getHambre());
+    }//GEN-LAST:event_miConsentradoActionPerformed
+
+    private void miCorrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCorrerActionPerformed
         pet.setEnergia(pet.getEnergia()-correr.getEnergia());//Para disminuir energia
           this.barEnergia.setValue(pet.getEnergia());
           
          pet.setAburrimiento(pet.getAburrimiento()-correr.getEntretenimiento());//para disminur Aburrimiento.
             this.barAburrimiento.setValue(pet.getAburrimiento());
-          
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_miCorrerActionPerformed
 
-    private void btnEnergiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnergiaActionPerformed
-        sumaEnergia();
-        int valor=this.barAburrimiento.getValue();
-        this.lblTime.setText(String.valueOf(valor));
-       
-    }//GEN-LAST:event_btnEnergiaActionPerformed
+    private void miHuesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miHuesoActionPerformed
+        pet.setEnergia(pet.getEnergia()+hueso.getEnergia());//Para aumentar energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+         pet.setHambre(pet.getHambre()-hueso.getSatisfaccion());//para disminur Hambre
+            this.barHambre.setValue(pet.getHambre());
+    }//GEN-LAST:event_miHuesoActionPerformed
+
+    private void miExcavarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miExcavarActionPerformed
+        pet.setEnergia(pet.getEnergia()-excavar.getEnergia());//Para disminuir energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+         pet.setAburrimiento(pet.getAburrimiento()-excavar.getEntretenimiento());//para disminur Aburrimiento.
+            this.barAburrimiento.setValue(pet.getAburrimiento());
+    }//GEN-LAST:event_miExcavarActionPerformed
+
+    private void miEsconditeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEsconditeActionPerformed
+        pet.setEnergia(pet.getEnergia()-escondite.getEnergia());//Para disminuir energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+         pet.setAburrimiento(pet.getAburrimiento()-escondite.getEntretenimiento());//para disminur Aburrimiento.
+            this.barAburrimiento.setValue(pet.getAburrimiento());
+    }//GEN-LAST:event_miEsconditeActionPerformed
+
+    private void miPasearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPasearActionPerformed
+       pet.setEnergia(pet.getEnergia()-pasear.getEnergia());//Para disminuir energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+         pet.setAburrimiento(pet.getAburrimiento()-pasear.getEntretenimiento());//para disminur Aburrimiento.
+            this.barAburrimiento.setValue(pet.getAburrimiento());
+    }//GEN-LAST:event_miPasearActionPerformed
+
+    private void miFutbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miFutbolActionPerformed
+       pet.setEnergia(pet.getEnergia()-futbol.getEnergia());//Para disminuir energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+         pet.setAburrimiento(pet.getAburrimiento()-futbol.getEntretenimiento());//para disminur Aburrimiento.
+            this.barAburrimiento.setValue(pet.getAburrimiento());
+    }//GEN-LAST:event_miFutbolActionPerformed
+
+    private void miLechugaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLechugaActionPerformed
+        pet.setEnergia(pet.getEnergia()+lechuga.getEnergia());//Para aumentar energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+         pet.setHambre(pet.getHambre()-lechuga.getSatisfaccion());//para disminur Hambre
+            this.barHambre.setValue(pet.getHambre());
+    }//GEN-LAST:event_miLechugaActionPerformed
+
+    private void miGalletasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miGalletasActionPerformed
+        pet.setEnergia(pet.getEnergia()+galletas.getEnergia());//Para aumentar energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+         pet.setHambre(pet.getHambre()-galletas.getSatisfaccion());//para disminur Hambre
+            this.barHambre.setValue(pet.getHambre());
+    }//GEN-LAST:event_miGalletasActionPerformed
+
+    private void miInyeccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miInyeccionActionPerformed
+        
+        pet.setEnergia(pet.getEnergia()+inyeccion.getCuracion());//Para aumentar energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+        pet.setHambre(pet.getHambre()-inyeccion.getCuracion());//para disminur Hambre
+           this.barHambre.setValue(pet.getHambre());
+           
+        pet.setNecesidades(pet.getNecesidades()-inyeccion.getCuracion());//Para aumentar energia
+          this.barBanio.setValue(pet.getNecesidades());
+          
+        pet.setAburrimiento(pet.getAburrimiento()-inyeccion.getCuracion());//para disminur Hambre
+            this.barHambre.setValue(pet.getHambre()); 
+    }//GEN-LAST:event_miInyeccionActionPerformed
+
+    private void miPastillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPastillaActionPerformed
+        pet.setEnergia(pet.getEnergia()+pastilla.getCuracion());//Para aumentar energia
+          this.barEnergia.setValue(pet.getEnergia());
+          
+        pet.setHambre(pet.getHambre()-pastilla.getCuracion());//para disminur Hambre
+           this.barHambre.setValue(pet.getHambre());
+           
+        pet.setNecesidades(pet.getNecesidades()-pastilla.getCuracion());//Para aumentar energia
+          this.barBanio.setValue(pet.getNecesidades());
+          
+        pet.setAburrimiento(pet.getAburrimiento()-pastilla.getCuracion());//para disminur Hambre
+            this.barHambre.setValue(pet.getHambre()); 
+    }//GEN-LAST:event_miPastillaActionPerformed
+
+    private void btnDormirMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDormirMouseReleased
+           
+    }//GEN-LAST:event_btnDormirMouseReleased
+
+    private void btnDormirMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDormirMousePressed
+      
+    }//GEN-LAST:event_btnDormirMousePressed
 
     /**
      * @param args the command line arguments
@@ -421,16 +774,23 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     private javax.swing.JProgressBar barBanio;
     private javax.swing.JProgressBar barEnergia;
     private javax.swing.JProgressBar barHambre;
-    private javax.swing.JProgressBar barSalud;
-    private javax.swing.JButton btnEnergia;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
+    private javax.swing.JButton btnBanio;
+    private javax.swing.JButton btnDormir;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator10;
+    private javax.swing.JPopupMenu.Separator jSeparator11;
+    private javax.swing.JPopupMenu.Separator jSeparator12;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JPopupMenu.Separator jSeparator8;
+    private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JLabel lblAburrimiento;
     private javax.swing.JLabel lblBanio;
     private javax.swing.JLabel lblEdad;
@@ -441,6 +801,23 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     private javax.swing.JLabel lblImagen;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblSalud;
-    private javax.swing.JLabel lblTime;
+    private javax.swing.JLabel lblSalud1;
+    private javax.swing.JLabel lblSalud2;
+    private javax.swing.JLabel lblSalud3;
+    private javax.swing.JMenu mActividades;
+    private javax.swing.JMenu mAlimentos;
+    private javax.swing.JMenuItem miCarne;
+    private javax.swing.JMenuItem miConsentrado;
+    private javax.swing.JMenuItem miCorrer;
+    private javax.swing.JMenuItem miEscondite;
+    private javax.swing.JMenuItem miExcavar;
+    private javax.swing.JMenuItem miFutbol;
+    private javax.swing.JMenuItem miGalletas;
+    private javax.swing.JMenuItem miHueso;
+    private javax.swing.JMenuItem miInyeccion;
+    private javax.swing.JMenuItem miLechuga;
+    private javax.swing.JMenu miMedicina;
+    private javax.swing.JMenuItem miPasear;
+    private javax.swing.JMenuItem miPastilla;
     // End of variables declaration//GEN-END:variables
 }

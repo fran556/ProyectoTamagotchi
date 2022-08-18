@@ -9,7 +9,7 @@ package MascotaVirtual;
  * @author Francisco
  */
 public enum Estado {
-    Normal(1),Enfermo(2);
+    Saludable(1),Enfermo(2),Murio(3);
     
     private int valor;
 
