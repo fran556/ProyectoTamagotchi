@@ -7,7 +7,7 @@ package Actividad.Mascota;
  */
 public class Correr extends Actividad{
     public Correr(){
-      super(15,30);  //pasamos por parametro energia y entretenimiento
+      super(10,30);  //pasamos por parametro energia y entretenimiento
     }
     
 }

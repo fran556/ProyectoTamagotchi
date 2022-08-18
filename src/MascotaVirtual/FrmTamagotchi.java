@@ -167,7 +167,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
          contador5++;
         System.out.println(contador5);
         if (contador5==hueso.getTiempo() ){
-            this.btnBanio.setEnabled(true);
+            this.miHueso.setEnabled(true);
             contador5=0;
             time6.stop();
         }
@@ -176,7 +176,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
          contador6++;
         System.out.println(contador6);
         if (contador6==lechuga.getTiempo() ){
-            this.btnBanio.setEnabled(true);
+            this.miLechuga.setEnabled(true);
             contador6=0;
             time7.stop();
         }
@@ -386,11 +386,6 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         jSeparator11 = new javax.swing.JPopupMenu.Separator();
         miFutbol = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
-        miMedicina = new javax.swing.JMenu();
-        miInyeccion = new javax.swing.JMenuItem();
-        jSeparator8 = new javax.swing.JPopupMenu.Separator();
-        miPastilla = new javax.swing.JMenuItem();
-        jSeparator12 = new javax.swing.JPopupMenu.Separator();
         mAlimentos = new javax.swing.JMenu();
         miConsentrado = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -401,6 +396,11 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         miCarne = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         miGalletas = new javax.swing.JMenuItem();
+        miMedicina = new javax.swing.JMenu();
+        miInyeccion = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
+        miPastilla = new javax.swing.JMenuItem();
+        jSeparator12 = new javax.swing.JPopupMenu.Separator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TAMAGOTCHI");
@@ -584,32 +584,6 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
 
         jMenuBar1.add(mActividades);
 
-        miMedicina.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/kit-de-primeros-auxilios.png"))); // NOI18N
-        miMedicina.setText("Medicina");
-        miMedicina.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-
-        miInyeccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/vacuna.png"))); // NOI18N
-        miInyeccion.setText("Inyeccion");
-        miInyeccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miInyeccionActionPerformed(evt);
-            }
-        });
-        miMedicina.add(miInyeccion);
-        miMedicina.add(jSeparator8);
-
-        miPastilla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/medicamento.png"))); // NOI18N
-        miPastilla.setText("Pastilla");
-        miPastilla.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miPastillaActionPerformed(evt);
-            }
-        });
-        miMedicina.add(miPastilla);
-        miMedicina.add(jSeparator12);
-
-        jMenuBar1.add(miMedicina);
-
         mAlimentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/healthy-food.png"))); // NOI18N
         mAlimentos.setText("Alimentos");
         mAlimentos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -664,6 +638,32 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         mAlimentos.add(miGalletas);
 
         jMenuBar1.add(mAlimentos);
+
+        miMedicina.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/kit-de-primeros-auxilios.png"))); // NOI18N
+        miMedicina.setText("Medicina");
+        miMedicina.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        miInyeccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/vacuna.png"))); // NOI18N
+        miInyeccion.setText("Inyeccion");
+        miInyeccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miInyeccionActionPerformed(evt);
+            }
+        });
+        miMedicina.add(miInyeccion);
+        miMedicina.add(jSeparator8);
+
+        miPastilla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconosBotones/medicamento.png"))); // NOI18N
+        miPastilla.setText("Pastilla");
+        miPastilla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPastillaActionPerformed(evt);
+            }
+        });
+        miMedicina.add(miPastilla);
+        miMedicina.add(jSeparator12);
+
+        jMenuBar1.add(miMedicina);
 
         setJMenuBar(jMenuBar1);
 

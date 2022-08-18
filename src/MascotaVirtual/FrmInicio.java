@@ -5,13 +5,16 @@
 package MascotaVirtual;
 
 import java.awt.Toolkit;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 /**
  *
  * @author Francisco
  */
-public class FrmInicio extends javax.swing.JFrame {
-
+public final class FrmInicio extends javax.swing.JFrame {
+private Clip clip;
+    private String ruta;
     /**
      * Creates new form FrmInicio
      */
@@ -19,6 +22,16 @@ public class FrmInicio extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(FrmInicio.this);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/iconosbotones/tamago.png")));
+        ruta="/sonidos/";
+        sonido("ringtonesstrangerthings");
+    }
+    public void sonido(String archivo){
+        try {
+            clip=AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream(this.ruta+archivo+".wav")));
+            clip.start();
+        } catch (Exception e) {
+        }
     }
 
     /**
