@@ -145,7 +145,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
     public void murio(){
          if (pet.getAburrimiento()==100 && pet.getNecesidades()==100 ||
              pet.getEnergia()==0 && pet.getHambre()==100 || pet.getAburrimiento()==100 && pet.getEnergia()==0 ||
-             pet.getNecesidades()==100  && pet.getHambre()==100  ){
+             pet.getNecesidades()==100  && pet.getHambre()==100){
             pet.setEstado(Estado.Murio);
             this.lblEstado.setText(String.valueOf(pet.getEstado()));
             
@@ -356,7 +356,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         lblSalud.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblSalud.setForeground(new java.awt.Color(0, 0, 255));
         lblSalud.setText("Nombre");
-        jPanel1.add(lblSalud, new org.netbeans.lib.awtextra.AbsoluteConstraints(518, 20, 60, 10));
+        jPanel1.add(lblSalud, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, 60, 30));
 
         lblAburrimiento.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblAburrimiento.setForeground(new java.awt.Color(0, 0, 204));
