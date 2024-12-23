@@ -93,7 +93,7 @@ public final class FrmTamagotchi extends javax.swing.JFrame {
         }
     }
     
-    Timer timer = new Timer (1000, (ActionEvent e) -> {
+    Timer timer = new Timer (5000, (ActionEvent e) -> {
         
         this.sumaAburrimiento();
         this.sumaBanio();
